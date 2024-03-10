@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=DotGothic16&display=swap');
+*{
+    margin: 0;
+}
+
+.contenedor{
+    background: #b2ffff;
+    width: 100vw;
+    height: 100vh;
+    text-align: center;
+font-family: 'Black Ops One', cursive;
+font-weight: 700;
+font-family: 'DotGothic16', sans-serif;
+font-weight: 700;
+}
+
+p{
+    font-size: xx-large;
+    padding: 10%;
+font-family: 'Black Ops One', cursive;
+font-weight: 700;
+}
+
+button{
+    font-size: xx-large;
+    padding: 0.90em;
+font-family: 'DotGothic16', sans-serif;
+font-weight: 700;
+}
+
+#yesBtn{
+    transform: translate(-70%,0);
+background: #7fff00;
+font-family: 'DotGothic16', sans-serif;
+font-weight: 700;
+}
+
+#noBtn{
+transform: translate(-20%,0);
+    position: absolute;
+background: #e34234;
+font-family: 'DotGothic16', sans-serif;
+font-weight: 700;
+}
