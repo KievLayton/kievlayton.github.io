@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: #080808;
+    background-color: #0a0206;
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -18,36 +18,34 @@ body {
     position: relative;
 }
 
-/* --*/
 .bg-orbs {
     position: absolute;
     width: 100%;
     height: 100%;
     z-index: 0;
-    filter: blur(70px); 
+    filter: blur(75px); 
 }
 
 .orb {
     position: absolute;
     border-radius: 50%;
     animation: float 15s infinite alternate ease-in-out;
-    opacity: 0.5;
+    opacity: 0.6;
 }
 
-.orb-1 { width: 400px; height: 400px; background: #3d1b11; top: -10%; left: -10%; }
-.orb-2 { width: 350px; height: 350px; background: #d4af37; bottom: -10%; right: -5%; animation-delay: -5s; }
-.orb-3 { width: 300px; height: 300px; background: #260a0a; top: 40%; left: 30%; animation-delay: -10s; }
+.orb-1 { width: 400px; height: 400px; background: #ff1493; top: -10%; left: -10%; }
+.orb-2 { width: 350px; height: 350px; background: #ff69b4; bottom: -10%; right: -5%; animation-delay: -5s; }
+.orb-3 { width: 300px; height: 300px; background: #8a2be2; top: 40%; left: 30%; animation-delay: -10s; }
 
 @keyframes float {
     0% { transform: translate(0, 0) scale(1); }
     100% { transform: translate(60px, 60px) scale(1.2); }
 }
 
-/* -CRISTAL- */
 .glass-card {
-    background: rgba(20, 20, 20, 0.5); 
-    border: 1px solid rgba(212, 175, 55, 0.2); 
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9); 
+    background: rgba(20, 10, 15, 0.55); 
+    border: 1px solid rgba(255, 105, 180, 0.25); 
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 20, 147, 0.15); 
     backdrop-filter: blur(15px); 
     -webkit-backdrop-filter: blur(15px);
     border-radius: 20px;
@@ -68,20 +66,19 @@ body {
 #mensaje {
     font-size: 1.5rem;
     line-height: 1.8;
-    color: #e6dac3;
+    color: #ffe4e1;
     margin-bottom: 40px;
     font-weight: 300;
 }
 
 .destaque {
-    color: #d4af37;
+    color: #ff69b4;
     font-style: italic;
     font-size: 2.2rem;
     font-weight: 600;
-    text-shadow: 0 0 15px rgba(212, 175, 55, 0.4); 
+    text-shadow: 0 0 20px rgba(255, 105, 180, 0.5); 
 }
 
-/* ---B--- */
 .botones {
     position: relative;
     width: 100%;
@@ -105,22 +102,28 @@ button {
 }
 
 #yesBtn {
-    background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
-    color: #080808;
+    background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+    color: #fff;
     border: none;
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 0 15px rgba(255, 20, 147, 0.4);
     z-index: 10;
 }
 
 #yesBtn:hover {
-    box-shadow: 0 0 25px rgba(212, 175, 55, 0.7);
+    box-shadow: 0 0 25px rgba(255, 20, 147, 0.8);
     transform: scale(1.05);
 }
 
-/* No*/
 #noBtn {
     background: transparent;
     color: #888;
     border: 1px solid #555;
     z-index: 50;
+}
+
+.pink-mode {
+    color: #ff69b4 !important;
+    border: 1px solid #ff69b4 !important;
+    background: rgba(255, 105, 180, 0.05) !important;
+    box-shadow: 0 0 15px rgba(255, 105, 180, 0.3) !important;
 }
