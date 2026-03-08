@@ -36,7 +36,7 @@ yesBtn.addEventListener('click', function () {
     
     setTimeout(() => {
         // C
-        mensaje.innerHTML = "<span style='font-size: 1.2em;'>Será un día muy lindo, Sandy.</span><br><br><span class='destaque'>Gracias por aceptar.</span> ✨";
+        mensaje.innerHTML = "<span style='font-size: 1.2em;'>Gracias, será un día muy lindo, Sandy.</span><br><br><span class='destaque'>Sabía que aceptarías.</span> ✨";
         
         // H
         document.querySelector('.botones').style.display = 'none';
@@ -45,4 +45,5 @@ yesBtn.addEventListener('click', function () {
         // R
         tarjeta.style.opacity = '1';
     }, 500); // T
+
 });
