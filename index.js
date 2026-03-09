@@ -1,17 +1,22 @@
-const musica = new Audio('cancion.mp3');
-musica.loop = true; 
-musica.volume = 0.6; 
+const musica = document.getElementById('musicaFondo');
+musica.volume = 0.6;
 let musicaSonando = false;
 
 function activarMusica() {
     if (!musicaSonando) {
-        musica.play().catch(e => console.log("Bloqueo del navegador evadido"));
-        musicaSonando = true;
+        
+        musica.play().then(() => {
+            musicaSonando = true;
+            
+            document.removeEventListener('click', activarMusica);
+            document.removeEventListener('touchstart', activarMusica);
+        }).catch(e => console.log("Esperando interacción más fuerte del usuario..."));
     }
 }
 
-document.body.addEventListener('click', activarMusica);
-document.body.addEventListener('touchstart', activarMusica);
+document.addEventListener('click', activarMusica);
+document.addEventListener('touchstart', activarMusica);
+
 // -------------------------
 const yesBtn = document.querySelector('#yesBtn');
 const noBtn = document.querySelector('#noBtn');
