@@ -5,9 +5,10 @@ let musicaSonando = false;
 function activarMusica() {
     if (!musicaSonando) {
         
+        musica.currentTime = 1; 
+        
         musica.play().then(() => {
             musicaSonando = true;
-            
             document.removeEventListener('click', activarMusica);
             document.removeEventListener('touchstart', activarMusica);
         }).catch(e => console.log("Esperando interacción más fuerte del usuario..."));
@@ -25,7 +26,7 @@ const tarjeta = document.querySelector('#tarjeta');
 
 let huyendo = false;
 let conteoEvasiones = 0;
-const limiteEvasiones = Math.floor(Math.random() * 4) + 2; 
+const limiteEvasiones = Math.floor(Math.random() * 4) + 3; 
 let estadoBoton = 0; 
 
 const opcionesTrampa = [
