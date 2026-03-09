@@ -1,3 +1,18 @@
+const musica = new Audio('cancion.mp3');
+musica.loop = true; 
+musica.volume = 0.6; 
+let musicaSonando = false;
+
+function activarMusica() {
+    if (!musicaSonando) {
+        musica.play().catch(e => console.log("Bloqueo del navegador evadido"));
+        musicaSonando = true;
+    }
+}
+
+document.body.addEventListener('click', activarMusica);
+document.body.addEventListener('touchstart', activarMusica);
+// -------------------------
 const yesBtn = document.querySelector('#yesBtn');
 const noBtn = document.querySelector('#noBtn');
 const mensaje = document.querySelector('#mensaje');
