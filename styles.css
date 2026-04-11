@@ -94,11 +94,17 @@ h3 {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 20px;
-    padding: 40px;
+    padding: 30px 20px;
+    /* Reducimos un poco el padding lateral */
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     text-align: center;
     max-width: 90%;
     width: 500px;
+    height: auto;
+    /* Que el alto sea automático según el texto */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 /* Application Phases */
@@ -146,9 +152,15 @@ h3 {
 .buttons-container {
     display: flex;
     justify-content: center;
+    align-items: center;
+    /* Alinea al centro verticalmente */
     gap: 1.5rem;
     position: relative;
-    height: 50px;
+    /* Quitamos el height fijo de 50px */
+    min-height: 50px;
+    flex-wrap: wrap;
+    /* ¡ESTO ES CLAVE! Permite que los botones bajen si no caben */
+    width: 100%;
 }
 
 .btn {
@@ -481,4 +493,25 @@ input:checked+.slider:before {
     z-index: 105;
     box-shadow: 0 0 20px var(--primary);
     animation: pulse 2s infinite alternate;
+}
+
+/* Optimizaciones para Celulares */
+@media (max-width: 480px) {
+    .buttons-container {
+        flex-direction: column;
+        /* Botones uno arriba del otro */
+        gap: 1rem;
+    }
+
+    .btn {
+        width: 100%;
+        /* Que los botones ocupen todo el ancho disponible */
+        font-size: 0.95rem;
+        padding: 15px 20px;
+    }
+
+    .main-prompt h1 {
+        font-size: 1.8rem;
+        /* Título un poco más chico para que no ocupe 5 renglones */
+    }
 }
