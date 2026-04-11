@@ -27,35 +27,63 @@ document.addEventListener("DOMContentLoaded", () => {
     let evasions = 0;
     const maxEvasions = 4;
     let originalRect = null;
+    let isMoving = false; // Flag para evitar múltiples tiros rápidos mientras brinca
 
     btnNo.addEventListener('mouseover', moveButton);
     btnNo.addEventListener('touchstart', moveButton, { passive: false });
 
     function moveButton(e) {
-        if (evasions >= maxEvasions) return;
+        if (evasions >= maxEvasions || isMoving) return;
         if (e) e.preventDefault();
+        
+        isMoving = true;
 
         if (!btnNo.classList.contains('btn-evasive')) {
             originalRect = btnNo.getBoundingClientRect();
+            
+            // Movemos el botón al contenedor maestro de fase 1 durante el salto
+            // Esto evita que el backdrop-filter de la tarjeta distorsione el sistema de coordenadas.
+            document.getElementById('phase-1').appendChild(btnNo);
+
             btnNo.classList.add('btn-evasive');
-            btnNo.style.width = originalRect.width + 'px';
-            btnNo.style.height = originalRect.height + 'px';
+            // En móvil dejamos que su tamaño se ajuste al texto (ancho automático) para que no sea del tamaño de la pantalla
+            if (window.innerWidth > 480) {
+                btnNo.style.width = originalRect.width + 'px';
+                btnNo.style.height = originalRect.height + 'px';
+            } else {
+                btnNo.style.width = 'auto';
+            }
             btnNo.style.left = originalRect.left + 'px';
             btnNo.style.top = originalRect.top + 'px';
         }
 
         // Wait a small cycle to allow CSS `fixed` to apply before transitioning
         setTimeout(() => {
+            const currentRect = btnNo.getBoundingClientRect();
+            
+            // Generar un salto de entre 50 y 120 pixeles en una dirección al azar
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 50 + Math.random() * 70;
+
+            let newX = currentRect.left + Math.cos(angle) * distance;
+            let newY = currentRect.top + Math.sin(angle) * distance;
+
+            // Mantener dentro de los límites de la pantalla
             const maxX = window.innerWidth - btnNo.offsetWidth - 20;
             const maxY = window.innerHeight - btnNo.offsetHeight - 20;
 
-            const randomX = Math.max(20, Math.floor(Math.random() * maxX));
-            const randomY = Math.max(20, Math.floor(Math.random() * maxY));
+            newX = Math.max(20, Math.min(newX, maxX));
+            newY = Math.max(20, Math.min(newY, maxY));
 
-            btnNo.style.left = `${randomX}px`;
-            btnNo.style.top = `${randomY}px`;
+            btnNo.style.left = `${newX}px`;
+            btnNo.style.top = `${newY}px`;
 
             evasions++;
+
+            // Reactivar evento después de que termine la animación
+            setTimeout(() => {
+                isMoving = false;
+            }, 400);
 
             if (evasions === maxEvasions) {
                 // Return to original
@@ -67,6 +95,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     btnNo.style.top = `${originalRect.top}px`;
 
                     setTimeout(() => {
+                        // Devolver a su contendor original
+                        document.querySelector('#phase-1 .buttons-container').appendChild(btnNo);
+                        
                         btnNo.classList.remove('btn-evasive');
                         btnNo.style.left = '';
                         btnNo.style.top = '';
@@ -161,6 +192,9 @@ document.addEventListener("DOMContentLoaded", () => {
         zIndices.sort(() => Math.random() - 0.5);
 
         allCards.forEach((card, i) => {
+            // Reinsertar tarjeta en DOM para asegurar orden correcto
+            deskContainer.appendChild(card);
+
             const angle = (Math.random() - 0.5) * 30;
             const offsetX = (Math.random() - 0.5) * cx * 0.9;
             let offsetY = (Math.random() - 0.5) * cy * 0.9;
@@ -203,19 +237,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function applyOrderLayout() {
-        let accumulatedY = 100;
-        cardsData.forEach((card, idx) => {
+        deskContainer.classList.add('ordered-mode');
+        // No necesitamos calcular 'top' porque en css están con flow 'relative'.
+        // Pero vaciaremos transformaciones para que no estorben visualmente.
+        cardsData.forEach((card) => {
             card.el.style.transition = 'top 0.5s ease, left 0.5s ease, transform 0.5s ease';
-            card.el.style.transform = `translate(-50%, 0) rotate(0deg)`;
-            card.el.style.left = `50%`;
-            card.el.style.top = `${accumulatedY}px`;
+            card.el.style.transform = `none`;
+            card.el.style.left = `0`;
+            card.el.style.top = `auto`;
 
-            accumulatedY += card.el.offsetHeight + 40;
             setTimeout(() => { card.el.style.transition = 'box-shadow 0.2s ease'; }, 500);
         });
     }
 
     function applyCaosLayout() {
+        deskContainer.classList.remove('ordered-mode');
         cardsData.forEach(card => {
             card.el.style.transition = 'top 0.5s ease, left 0.5s ease, transform 0.5s ease';
             card.el.style.transform = `translate(-50%, -50%) rotate(${card.angle}deg)`;
@@ -237,6 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         function dragMouseDown(e) {
+            if (deskContainer.classList.contains('ordered-mode') && !isKey) return;
             e.preventDefault();
             bumpZ();
             startX = e.clientX;
@@ -250,6 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         function dragTouchStart(e) {
+            if (deskContainer.classList.contains('ordered-mode') && !isKey) return;
             bumpZ();
             startX = e.touches[0].clientX;
             startY = e.touches[0].clientY;
@@ -432,10 +470,14 @@ document.addEventListener("DOMContentLoaded", () => {
             modalTtt.classList.add('hidden');
             const keyEl = document.getElementById('hidden-key');
             keyEl.style.display = 'block';
-            // Spawn down near where the chapter 7 button will be
-            keyEl.style.position = 'fixed';
-            keyEl.style.left = '50%';
-            keyEl.style.top = '85%';
+            
+            // Spawn near the locked card
+            const lockedCard = document.getElementById('locked-card');
+            
+            // Usar offsetTop/offsetLeft para que respete el scroll interno de desk-container
+            keyEl.style.position = 'absolute';
+            keyEl.style.left = (lockedCard.offsetLeft + lockedCard.offsetWidth / 2) + 'px';
+            keyEl.style.top = (lockedCard.offsetTop + lockedCard.offsetHeight / 2 + 100) + 'px';
 
             // Pop effect
             keyEl.style.transform = 'translate(-50%, -50%) scale(0)';
