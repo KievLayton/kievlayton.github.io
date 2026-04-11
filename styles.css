@@ -489,10 +489,14 @@ input:checked+.slider:before {
 }
 
 #btn-chapter-7 {
+    position: fixed;
     bottom: 30px;
-    z-index: 105;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
     box-shadow: 0 0 20px var(--primary);
     animation: pulse 2s infinite alternate;
+    white-space: nowrap;
 }
 
 /* Optimizaciones para Celulares */
@@ -512,6 +516,6 @@ input:checked+.slider:before {
 
     .main-prompt h1 {
         font-size: 1.8rem;
-        /* Título un poco más chico para que no ocupe 5 renglones */
+
     }
 }
