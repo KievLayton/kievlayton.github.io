@@ -222,11 +222,23 @@ h3 {
     overflow-x: hidden;
 }
 
-.controls-corner {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 200;
+.top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    z-index: 1000;
+    pointer-events: none;
+    /* allow clicking through the bar itself */
+}
+
+.top-bar > * {
+    pointer-events: all;
+    /* ensure buttons are clickable */
 }
 
 .switch-label {
@@ -315,10 +327,11 @@ input:checked+.slider:before {
     position: absolute;
     font-size: 2.5rem;
     cursor: grab;
-    z-index: 5;
+    z-index: 5000; /* Always on top */
     filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
     user-select: none;
     transition: transform 0.2s ease;
+    pointer-events: all;
 }
 
 .hidden-key:active {
@@ -489,21 +502,73 @@ input:checked+.slider:before {
 }
 
 #btn-chapter-7 {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
     box-shadow: 0 0 20px var(--primary);
     animation: pulse 2s infinite alternate;
     white-space: nowrap;
 }
 
+/* Ordered Mode Layout Helper */
+.desk-container.ordered-mode {
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 100px;
+    /* space for the last card */
+}
+
+.desk-container.ordered-mode .story-card {
+    position: relative;
+    /* Use relative flow in ordered mode for better scrolling */
+    margin: 40px auto;
+    left: 0 !important;
+    top: auto !important;
+    transform: none !important;
+    cursor: default;
+}
+
+.desk-container.ordered-mode .story-card:active {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    /* normal shadow */
+}
+
+.desk-container.ordered-mode .hidden-key {
+    position: absolute;
+    /* keep key absolutely positioned */
+}
+
 /* Optimizaciones para Celulares */
 @media (max-width: 480px) {
+    .top-bar {
+        padding: 5px 10px;
+    }
+
+    #btn-chapter-7 {
+        font-size: 0.75rem;
+        padding: 8px 12px;
+    }
+
+    .switch-label {
+        font-size: 0.75rem;
+        gap: 5px;
+    }
+
+    .switch {
+        width: 38px;
+        height: 18px;
+    }
+
+    .slider:before {
+        height: 12px;
+        width: 12px;
+        left: 3px;
+        bottom: 3px;
+    }
+
+    input:checked+.slider:before {
+        transform: translateX(18px);
+    }
+
     .buttons-container {
         flex-direction: column;
-        /* Botones uno arriba del otro */
         gap: 1rem;
     }
 
@@ -516,6 +581,14 @@ input:checked+.slider:before {
 
     .main-prompt h1 {
         font-size: 1.8rem;
+    }
 
+    .story-card {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .modal-content {
+        padding: 40px 20px;
     }
 }
