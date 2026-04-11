@@ -14,12 +14,18 @@
     padding: 0;
 }
 
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: fixed; /* Evita el scroll global y salto de Safari */
+    top: 0; left: 0;
+}
+
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
     font-family: 'Outfit', sans-serif;
-    overflow: hidden;
-    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -37,8 +43,8 @@ h3 {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     z-index: -1;
     overflow: hidden;
 }
@@ -112,8 +118,8 @@ h3 {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -236,7 +242,7 @@ h3 {
     /* allow clicking through the bar itself */
 }
 
-.top-bar > * {
+.top-bar>* {
     pointer-events: all;
     /* ensure buttons are clickable */
 }
@@ -327,7 +333,8 @@ input:checked+.slider:before {
     position: absolute;
     font-size: 2.5rem;
     cursor: grab;
-    z-index: 5000; /* Always on top */
+    z-index: 5000;
+    /* Always on top */
     filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
     user-select: none;
     transition: transform 0.2s ease;
@@ -590,5 +597,10 @@ input:checked+.slider:before {
 
     .modal-content {
         padding: 40px 20px;
+        max-height: 85%;
+    }
+
+    .cortazar-text {
+        padding-bottom: 50px;
     }
 }
