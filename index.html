@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartita</title>
+    <link rel="icon" type="image/x-icon" href="carta_icono.ico">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Playfair+Display:ital@0;1&display=swap"
+        rel="stylesheet">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+
+<body>
+    <div class="background-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Background Audio -->
+    <audio id="bg-audio" loop>
+        <source src="Lovesong (Remastered).m4a" type="audio/mp4">
+    </audio>
+
+    <!-- NIVEL 1: El Acceso -->
+    <section id="phase-1" class="phase active">
+        <div class="glass-card main-prompt">
+            <h1>Te escribi algunas cosas...</h1>
+            <p>Estuve pensando en algunas palabras. ¿Me permites compartirlas contigo?</p>
+            <div class="buttons-container">
+                <button id="btn-yes" class="btn primary">Sí quiero leer</button>
+                <button id="btn-no" class="btn secondary">No tengo tiempo</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- NIVEL 1.5: Selección de Camino -->
+    <section id="phase-1-5" class="phase hidden">
+        <div class="glass-card main-prompt">
+            <h2>¿Cómo deseas leer esto?</h2>
+            <p>Puedes escoger entre sumergirte en el desorden de mis pensamientos o leer con una estructura lineal y
+                predecible.</p>
+            <div class="buttons-container" style="margin-top: 30px;">
+                <button id="btn-jung" class="btn secondary">Caos</button>
+                <button id="btn-cortazar" class="btn primary">Orden</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- NIVEL 2 y 3: Escritorio de Rayuela y El Secreto Bloqueado -->
+    <section id="phase-2" class="phase hidden">
+        <div class="controls-corner">
+            <label class="switch-label">
+                <span>Caos</span>
+                <div class="switch">
+                    <input type="checkbox" id="layout-switch">
+                    <span class="slider"></span>
+                </div>
+                <span>Orden</span>
+            </label>
+        </div>
+
+        <div class="desk-container" id="desk-container">
+            <!-- La llave se coloca en el DOM y se esconde detrás de una de las cartas generadas. -->
+            <div id="hidden-key" class="hidden-key" draggable="false">🗝️</div>
+
+            <!-- Glass Cards generated via JS will be added here -->
+
+            <!-- El Párrafo Bloqueado (Secreto Nivel 3) -->
+            <div class="glass-card story-card locked-card" id="locked-card">
+                <div class="lock-overlay" id="lock-overlay">
+                    <span class="padlock-icon">🔒</span>
+                </div>
+                <div class="locked-content" id="locked-content">
+                    <h3>Nota 7</h3>
+                    <p>Me dijiste alguna vez que no te quise de la manera en la que hubieras querido; debo admitir que
+                        no te quise ni siquiera en la manera en la que yo hubiera querido. Definitivamente, confieso que
+                        me das miedo, pues en ti hallo mi debilidad. Veo que te gusta Lovesong de The Cure, esa canción
+                        se la escribió a su esposa por la distancia que luego enfrentaban por las giras; me haces sentir
+                        como esa canción y por eso me aterras, y me llenas de emoción. Por eso no te hablo tanto, no
+                        digo nada porque a veces es mejor simplemente no ver ni esperar ni provocar ningún resultado,
+                        pero créeme: yo te comería a besos, te escribiría El Quijote pero del romance, te haría tu Taj
+                        Mahal pero en vida... Quizá sea broma, pero sí eres muy capaz de robarme el alma. Sé
+                        perfectamente que no todo es color de rosa: lo áspero que es cualquier camino, lo mucho que
+                        queda por conocer, vivir, etc. Solo quería confesar de la manera más clara que pudiera.</p>
+                </div>
+            </div>
+
+            <!-- Botón Easter Egg Oculto inicialmente -->
+            <button id="btn-chapter-7" class="btn primary floating-action hidden">Leer Capítulo 7</button>
+
+            <!-- Modal Minijuego de Gato -->
+            <div class="modal hidden" id="modal-tictactoe">
+                <div class="glass-card modal-content tictactoe-content">
+                    <button class="btn-close" id="btn-close-ttt">X</button>
+                    <h2>El Guardián</h2>
+                    <p>Gáname en este juego de Gato para obtener la llave.</p>
+                    <div class="ttt-board" id="ttt-board">
+                        <div class="ttt-cell" data-index="0"></div>
+                        <div class="ttt-cell" data-index="1"></div>
+                        <div class="ttt-cell" data-index="2"></div>
+                        <div class="ttt-cell" data-index="3"></div>
+                        <div class="ttt-cell" data-index="4"></div>
+                        <div class="ttt-cell" data-index="5"></div>
+                        <div class="ttt-cell" data-index="6"></div>
+                        <div class="ttt-cell" data-index="7"></div>
+                        <div class="ttt-cell" data-index="8"></div>
+                    </div>
+                    <div class="ttt-message" id="ttt-message">Tu turno (X)</div>
+                </div>
+            </div>
+
+            <!-- Modal Capítulo 7 -->
+            <div class="modal hidden" id="modal-chapter-7">
+                <div class="glass-card modal-content">
+                    <button class="btn-close" id="btn-close-modal">X</button>
+                    <h2>Rayuela, capítulo 7</h2>
+                    <h3>Escrito por Julio Cortázar</h3>
+                    <p class="cortazar-text">
+                        Toco tu boca, con un dedo toco el borde de tu boca, voy dibujándola como si saliera de mi mano,
+                        como si por primera vez tu boca se entreabriera, y me basta cerrar los ojos para deshacerlo todo
+                        y recomenzar, hago nacer cada vez la boca que deseo, la boca que mi mano elige y te dibuja en la
+                        cara, una boca elegida entre todas, con soberana libertad elegida por mí para dibujarla con mi
+                        mano por tu cara, y que por un azar que no busco comprender coincide exactamente con tu boca que
+                        sonríe por debajo de la que mi mano te dibuja.<br><br>
+                        Me miras, de cerca me miras, cada vez más de cerca y entonces jugamos al cíclope, nos miramos
+                        cada vez más de cerca y nuestros ojos se agrandan, se acercan entre sí, se superponen y los
+                        cíclopes se miran, respirando confundidos, las bocas se encuentran y luchan tibiamente,
+                        mordiéndose con los labios, apoyando apenas la lengua en los dientes, jugando en sus recintos
+                        donde un aire pesado va y viene con un perfume viejo y un silencio. Entonces mis manos buscan
+                        hundirse en tu pelo, acariciar lentamente la profundidad de tu pelo mientras nos besamos como si
+                        tuviéramos la boca llena de flores o de peces, de movimientos vivos, de fragancia oscura. Y si
+                        nos mordemos el dolor es dulce, y si nos ahogamos en un breve y terrible absorber simultáneo del
+                        aliento, esa instantánea muerte es bella. Y hay una sola saliva y un solo sabor a fruta madura,
+                        y yo te siento temblar contra mí como una luna en el agua.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
