@@ -35,12 +35,12 @@ document.addEventListener("DOMContentLoaded", () => {
     function moveButton(e) {
         if (evasions >= maxEvasions || isMoving) return;
         if (e) e.preventDefault();
-        
+
         isMoving = true;
 
         if (!btnNo.classList.contains('btn-evasive')) {
             originalRect = btnNo.getBoundingClientRect();
-            
+
             // Movemos el botón al contenedor maestro de fase 1 durante el salto
             // Esto evita que el backdrop-filter de la tarjeta distorsione el sistema de coordenadas.
             document.getElementById('phase-1').appendChild(btnNo);
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Wait a small cycle to allow CSS `fixed` to apply before transitioning
         setTimeout(() => {
             const currentRect = btnNo.getBoundingClientRect();
-            
+
             // Generar un salto de entre 50 y 120 pixeles en una dirección al azar
             const angle = Math.random() * Math.PI * 2;
             const distance = 50 + Math.random() * 70;
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     setTimeout(() => {
                         // Devolver a su contendor original
                         document.querySelector('#phase-1 .buttons-container').appendChild(btnNo);
-                        
+
                         btnNo.classList.remove('btn-evasive');
                         btnNo.style.left = '';
                         btnNo.style.top = '';
@@ -470,17 +470,23 @@ document.addEventListener("DOMContentLoaded", () => {
             modalTtt.classList.add('hidden');
             const keyEl = document.getElementById('hidden-key');
             keyEl.style.display = 'block';
-            
+
             // Spawn near the locked card
             const lockedCard = document.getElementById('locked-card');
-            
-            // Usar offsetTop/offsetLeft para que respete el scroll interno de desk-container
-            keyEl.style.position = 'absolute';
-            keyEl.style.left = (lockedCard.offsetLeft + lockedCard.offsetWidth / 2) + 'px';
-            keyEl.style.top = (lockedCard.offsetTop + lockedCard.offsetHeight / 2 + 100) + 'px';
 
-            // Pop effect
-            keyEl.style.transform = 'translate(-50%, -50%) scale(0)';
+            // Si está en modo orden, usar scroll-aware positioning (absoluto al contenedor)
+            if (document.getElementById('desk-container').classList.contains('ordered-mode')) {
+                keyEl.style.position = 'absolute';
+                keyEl.style.left = (lockedCard.offsetLeft + lockedCard.offsetWidth / 2) + 'px';
+                keyEl.style.top = (lockedCard.offsetTop + lockedCard.offsetHeight / 2 + 100) + 'px';
+                keyEl.style.transform = 'translate(-50%, -50%) scale(0)';
+            } else {
+                // Modo caos: Aparecer en mero en medio de la pantalla para visibilidad perfecta
+                keyEl.style.position = 'fixed';
+                keyEl.style.left = '50%';
+                keyEl.style.top = '50%';
+                keyEl.style.transform = 'translate(-50%, -50%) scale(0)';
+            }
 
             // Allow element to render before transitioning
             requestAnimationFrame(() => {
